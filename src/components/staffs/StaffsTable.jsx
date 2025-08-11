@@ -36,16 +36,16 @@ function StaffsTable() {
                   <input
                     type="text"
                     class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full "
-                    placeholder="Search members..."
+                    placeholder="Search Staffs..."
                   />
                 </div>
                 <div>
                   <select class="border border-gray-300 rounded-lg px-4 py-2  w-full sm:w-auto">
-                    <option value="">All Departments</option>
-                    <option value="engineering">Engineering</option>
-                    <option value="design">Design</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Sales</option>
+                    <option value="">Admin</option>
+                    <option value="engineering">Other</option>
+                    <option value="design">Other</option>
+                    <option value="marketing">Other</option>
+                    <option value="sales">Other</option>
                   </select>
                 </div>
               </div>
@@ -67,12 +67,7 @@ function StaffsTable() {
                     >
                       Role
                     </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Department
-                    </th>
+
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -94,25 +89,22 @@ function StaffsTable() {
                         <div class="h-10 w-10 flex-shrink-0">
                           <img
                             class="h-10 w-10 rounded-full object-cover"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"
                             alt=""
                           />
                         </div>
                         <div class="ml-4">
                           <div class="text-sm font-medium text-gray-900">
-                            Tom Cook
+                            Edmar Jay Heolin
                           </div>
                           <div class="text-sm text-gray-500">
-                            tom.cook@example.com
+                            jaywrsnp6@gmail.com
                           </div>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">Senior Developer</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">Engineering</div>
+                      <div class="text-sm text-gray-900">Admin</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -139,9 +131,8 @@ function StaffsTable() {
               <div class="flex items-center justify-between flex-col sm:flex-row">
                 <div class="mb-4 sm:mb-0">
                   <p class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to{" "}
-                    <span class="font-medium">5</span> of{" "}
-                    <span class="font-medium">24</span> results
+                    Showing
+                    <span class="font-medium"> 1</span> results
                   </p>
                 </div>
               </div>
