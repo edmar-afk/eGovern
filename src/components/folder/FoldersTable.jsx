@@ -118,9 +118,8 @@ function FoldersTable() {
               <div class="flex items-center justify-between flex-col sm:flex-row">
                 <div class="mb-4 sm:mb-0">
                   <p class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to{" "}
-                    <span class="font-medium">5</span> of{" "}
-                    <span class="font-medium">24</span> results
+                    Showing
+                    <span class="font-medium"> 24</span> results
                   </p>
                 </div>
               </div>
