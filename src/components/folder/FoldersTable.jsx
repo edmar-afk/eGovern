@@ -1,5 +1,5 @@
 import React from "react";
-
+import FolderIcon from "@mui/icons-material/Folder";
 function FoldersTable() {
   return (
     <>
@@ -9,10 +9,8 @@ function FoldersTable() {
             <div class="p-6 border-b border-gray-200">
               <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 class="text-xl font-bold text-gray-800">Staff Members</h2>
-                  <p class="text-gray-500 mt-1">
-                    Manage your team staff and their account permissions here.
-                  </p>
+                  <h2 class="text-xl font-bold text-gray-800">Folders</h2>
+                  <p class="text-gray-500 mt-1">Manage your Folders here.</p>
                 </div>
               </div>
 
@@ -36,17 +34,8 @@ function FoldersTable() {
                   <input
                     type="text"
                     class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full "
-                    placeholder="Search members..."
+                    placeholder="Search Folder..."
                   />
-                </div>
-                <div>
-                  <select class="border border-gray-300 rounded-lg px-4 py-2  w-full sm:w-auto">
-                    <option value="">All Departments</option>
-                    <option value="engineering">Engineering</option>
-                    <option value="design">Design</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Sales</option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -65,7 +54,7 @@ function FoldersTable() {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Created by
+                      Total Files
                     </th>
                     <th
                       scope="col"
@@ -73,12 +62,7 @@ function FoldersTable() {
                     >
                       Total Size
                     </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Status
-                    </th>
+
                     <th
                       scope="col"
                       class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -91,34 +75,29 @@ function FoldersTable() {
                   <tr class="hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
-                        <div class="h-10 w-10 flex-shrink-0">
-                          <img
-                            class="h-10 w-10 rounded-full object-cover"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
+                        <div class="">
+                          <FolderIcon
+                            className="text-yellow-500"
+                            fontSize="large"
                           />
                         </div>
                         <div class="ml-4">
                           <div class="text-sm font-medium text-gray-900">
-                            Tom Cook
+                            Sample_file.pdf
                           </div>
                           <div class="text-sm text-gray-500">
-                            tom.cook@example.com
+                            Uploaded by <i>Edmar Jay Heolin</i>
                           </div>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">Senior Developer</div>
+                      <div class="text-sm text-gray-900">500</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">Engineering</div>
+                      <div class="text-sm text-gray-900">100MB</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    </td>
+
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
                         href="#"
