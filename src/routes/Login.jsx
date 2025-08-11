@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import logo from '../assets/images/logo.jpg'
+import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.jpg";
 const Login = () => {
   useEffect(() => {
     class AuthAnimation {
@@ -47,6 +48,12 @@ const Login = () => {
               <h1 class="text-slate-900 text-center text-3xl font-semibold">
                 Sign in
               </h1>
+              <div className="text-center pt-8">
+                <Link to="/dashboard" className="text-blue-800 font-bold underline">
+                  Direct Dashboard for now
+                </Link>
+              </div>
+
               <form class="mt-12 space-y-6">
                 <div>
                   <label class="text-slate-900 text-sm font-medium mb-2 block">
@@ -106,7 +113,6 @@ const Login = () => {
                     </svg>
                   </div>
                 </div>
-               
 
                 <div class="!mt-12">
                   <button

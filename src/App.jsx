@@ -4,6 +4,7 @@ import Register from "./routes/Register";
 import Dashboard from "./routes/Dashboard";
 import Staffs from "./routes/Staffs";
 import Folders from "./routes/Folders";
+import NotFound from "./routes/NotFound";
 function Logout() {
   localStorage.clear();
   return <Navigate to="/" />;
@@ -19,7 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/staffs" element={<Staffs />} />
         <Route path="/folders" element={<Folders />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
