@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import logo from "../assets/images/logo.jpg";
 import api from "../assets/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -239,6 +239,15 @@ const Register = () => {
                   "Register"
                 )}
               </button>
+              <p className="text-slate-900 text-sm !mt-6 text-center">
+                Already have an account?{" "}
+                <Link
+                  to={"/"}
+                  className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold"
+                >
+                  Login here
+                </Link>
+              </p>
             </form>
           </div>
         </div>

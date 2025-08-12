@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.jpg";
 import api from "../assets/api";
 import Swal from "sweetalert2";
-
+import CircularProgress from "@mui/material/CircularProgress";
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -37,6 +38,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const res = await api.post("/api/login/", formData);
       const accessToken = res.data.access;
@@ -45,7 +47,6 @@ const Login = () => {
       localStorage.setItem("access", accessToken);
       localStorage.setItem("refresh", refreshToken);
 
-      // Decode JWT to check roles
       const payload = JSON.parse(atob(accessToken.split(".")[1]));
       if (payload.is_superuser && payload.is_staff) {
         Swal.fire({
@@ -76,6 +77,8 @@ const Login = () => {
         confirmButtonText: "OK",
         allowOutsideClick: false,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,13 +95,20 @@ const Login = () => {
       <div>
         <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
           <div className="max-w-[480px] w-full">
-            <img src={logo} alt="logo" className="w-24 mb-8 mx-auto block rounded-full" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-24 mb-8 mx-auto block rounded-full"
+            />
             <div className="p-6 sm:p-8 rounded-2xl bg-white/90 border border-gray-200 shadow-sm backdrop-blur-lg">
               <h1 className="text-slate-900 text-center text-3xl font-semibold">
                 Sign in
               </h1>
 
-              <form className="mt-12 space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <form
+                className="mt-12 space-y-6"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <div>
                   <label className="text-slate-900 text-sm font-medium mb-2 block">
                     User name
@@ -110,7 +120,7 @@ const Login = () => {
                     onChange={handleChange}
                     required
                     className="w-full text-slate-900 text-sm border border-slate-300 px-4 py-3 rounded-md outline-blue-600"
-                    placeholder="Enter user name"
+                    placeholder="Enter user name or email"
                   />
                 </div>
                 <div>
@@ -132,9 +142,21 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={handleLogin}
-                    className="w-full py-2 px-4 text-[15px] font-medium tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                    disabled={loading}
+                    className={`w-full flex items-center justify-center gap-2 py-2 px-4 text-[15px] font-medium tracking-wide rounded-md text-white ${
+                      loading
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
+                    }`}
                   >
-                    Sign in
+                    {loading ? (
+                      <>
+                        <CircularProgress size={20} color="inherit" />
+                        Validating... Please wait
+                      </>
+                    ) : (
+                      "Sign in"
+                    )}
                   </button>
                 </div>
 
