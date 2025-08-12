@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   Drawer,
   List,
@@ -160,21 +160,23 @@ function Sidebar() {
         </List>
 
         <Storage />
-        <Button
-          variant="contained"
-          startIcon={<ExitToAppIcon fontSize="small" />}
-          sx={{
-            bgcolor: "#b91c1c",
-            "&:hover": { bgcolor: "#7f1d1d" },
-            borderRadius: 2,
-            textTransform: "none",
-            fontSize: 14,
-            mt: 2,
-          }}
-          fullWidth
-        >
-          Logout
-        </Button>
+        <Link to="/logout" style={{ textDecoration: "none" }}>
+          <Button
+            variant="contained"
+            startIcon={<ExitToAppIcon fontSize="small" />}
+            sx={{
+              bgcolor: "#b91c1c",
+              "&:hover": { bgcolor: "#7f1d1d" },
+              borderRadius: 2,
+              textTransform: "none",
+              fontSize: 14,
+              mt: 2,
+            }}
+            fullWidth
+          >
+            Logout
+          </Button>
+        </Link>
       </Box>
       <Box sx={{ mt: "auto" }}>
         <RecentUploads />
@@ -189,7 +191,14 @@ function Sidebar() {
           color="inherit"
           edge="start"
           onClick={() => setMobileOpen(!mobileOpen)}
-          sx={{ position: "fixed", top: 16, left: 16, zIndex: 1000, backgroundColor: "gray", color:"white" }}
+          sx={{
+            position: "fixed",
+            top: 16,
+            left: 16,
+            zIndex: 1000,
+            backgroundColor: "gray",
+            color: "white",
+          }}
         >
           <MenuIcon />
         </IconButton>
