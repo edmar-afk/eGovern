@@ -52,21 +52,21 @@ const Login = () => {
         Swal.fire({
           icon: "success",
           title: "Login Successful",
-          text: "Redirecting to SB Dashboard...",
-          allowOutsideClick: false,
-          confirmButtonText: "OK",
-        }).then(() => {
-          navigate("/sb-dashboard");
-        });
-      } else {
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
           text: "Redirecting to Admin Dashboard...",
           allowOutsideClick: false,
           confirmButtonText: "OK",
         }).then(() => {
           navigate("/dashboard");
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: "Redirecting to SB Dashboard...",
+          allowOutsideClick: false,
+          confirmButtonText: "OK",
+        }).then(() => {
+          navigate("/sb-dashboard");
         });
       }
     } catch (err) {

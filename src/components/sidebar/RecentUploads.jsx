@@ -41,7 +41,7 @@ function RecentUploads() {
             className="flex items-center justify-between py-3 px-2 hover:bg-purple-900/50 rounded-lg transition"
           >
             <div className="flex items-center gap-3">
-              <InsertDriveFileIcon className="bg-purple-700 p-2 text-white rounded-full" />
+              <InsertDriveFileIcon className="bg-purple-700 p-1 text-white rounded-full" />
               <div>
                 <p className="text-white text-sm truncate">{file.name}</p>
                 <p className="text-gray-400 text-xs">{file.size}</p>

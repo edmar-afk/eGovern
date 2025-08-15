@@ -96,8 +96,8 @@ function Sidebar() {
       ),
     },
     {
-      to: "/restore",
-      label: "Restore File",
+      to: "/archives",
+      label: "Archives File",
       icon: (
         <RestoreFromTrashIcon
           fontSize="large"
