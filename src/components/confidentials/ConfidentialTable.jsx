@@ -5,17 +5,17 @@ import { Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
 import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
-import { getUserInfoFromToken } from "../../utils/auth";
-function ArchiveTable() {
+import ConfidentialFileUpload from "./ConfidentialFileUpload";
+
+function ConfidentialTable() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access");
-  const userInfo = getUserInfoFromToken(token);
 
   const fetchFiles = () => {
     setLoading(true);
     api
-      .get(`/api/files/archives/`, {
+      .get(`/api/file/confidential/`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -23,7 +23,7 @@ function ArchiveTable() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch archive files", err);
+        console.error("Failed to fetch confidential files", err);
         setLoading(false);
       });
   };
@@ -33,49 +33,10 @@ function ArchiveTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRestore = (file) => {
+  const handleDelete = (fileId) => {
     Swal.fire({
-      title: "Restore this file?",
-      text: "This will move the file back to active files.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#16a34a",
-      cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, restore it",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api
-          .patch(
-            `/api/files/${file.id}/unarchive/`,
-            {},
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then(async () => {
-            // ✅ Save log
-            await api.post(
-              "/api/upload-logs/",
-              {
-                info1: `${userInfo.first_name} restored the file ${file.file_name}`,
-              },
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-
-            Swal.fire("Restored!", "The file has been restored.", "success");
-            fetchFiles();
-          })
-          .catch(() => {
-            Swal.fire("Error!", "Failed to restore the file.", "error");
-          });
-      }
-    });
-  };
-
-  const handleDelete = (file) => {
-    Swal.fire({
-      title: "Permanently delete this file?",
-      text: "This action cannot be undone. The file will be removed from archive forever.",
+      title: "Permanently delete this confidential file?",
+      text: "This action cannot be undone. The file will be removed forever.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#dc2626",
@@ -84,28 +45,23 @@ function ArchiveTable() {
     }).then((result) => {
       if (result.isConfirmed) {
         api
-          .delete(`/api/files/${file.id}/delete/`, {
+          .delete(`/api/confidential-files/${fileId}/delete/`, {
             headers: { Authorization: `Bearer ${token}` },
           })
-          .then(async () => {
-            // ✅ Save log
-            await api.post(
-              "/api/upload-logs/",
-              {
-                info1: `${userInfo.first_name} deleted the file ${file.file_name} permanently from archives`,
-              },
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-
+          .then(() => {
             Swal.fire(
               "Deleted!",
-              "The file has been permanently deleted.",
+              "The confidential file has been permanently deleted.",
               "success"
             );
             fetchFiles();
           })
           .catch(() => {
-            Swal.fire("Error!", "Failed to delete the file.", "error");
+            Swal.fire(
+              "Error!",
+              "Failed to delete the confidential file.",
+              "error"
+            );
           });
       }
     });
@@ -116,11 +72,19 @@ function ArchiveTable() {
       <div className="container">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800">Archived Files</h2>
-            <p className="text-gray-500 mt-1">
-              Manage your archived files here. You can restore them anytime or
-              permanently delete them.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-between">
+              <div className="">
+                <h2 className="text-xl font-bold text-gray-800">
+                  Confidential Files
+                </h2>
+                <p className="text-red-600 mt-1 text-sm w-full sm:w-[70%] font-extralight">
+                  Warning: Confidential files are strictly managed. Deleting a
+                  file will permanently remove it, it will not be archived, and
+                  it cannot be restored. Proceed with caution.
+                </p>
+              </div>
+              <ConfidentialFileUpload onUploadSuccess={fetchFiles} />
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -136,9 +100,7 @@ function ArchiveTable() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     File Size
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Uploaded By
-                  </th>
+
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Date Uploaded
                   </th>
@@ -154,7 +116,7 @@ function ArchiveTable() {
                       colSpan={6}
                       className="px-6 py-4 text-center text-gray-500"
                     >
-                      Loading Files...
+                      Loading Confidential Files...
                     </td>
                   </tr>
                 ) : files.length === 0 ? (
@@ -163,7 +125,7 @@ function ArchiveTable() {
                       colSpan={6}
                       className="px-6 py-4 text-center text-gray-500"
                     >
-                      No archived files found.
+                      No confidential files found.
                     </td>
                   </tr>
                 ) : (
@@ -194,10 +156,10 @@ function ArchiveTable() {
                         <td className="px-6 py-4 text-sm">
                           {extension.toUpperCase()}
                         </td>
-                        <td className="px-6 py-4 text-sm">{file.file_size}</td>
                         <td className="px-6 py-4 text-sm">
-                          {file.uploaded_by.first_name}
+                          {file.file_size_human}
                         </td>
+
                         <td className="px-6 py-4 text-sm">
                           {new Date(file.date_creation)
                             .toLocaleString("en-US", {
@@ -212,12 +174,6 @@ function ArchiveTable() {
                         </td>
                         <td className="px-6 py-4 text-sm">
                           <div className="flex gap-3">
-                            <Tooltip title="Restore" arrow placement="top">
-                              <SettingsBackupRestoreIcon
-                                className="cursor-pointer text-green-600"
-                                onClick={() => handleRestore(file)} // ✅ send whole file
-                              />
-                            </Tooltip>
                             <Tooltip
                               title="Delete Permanently"
                               arrow
@@ -225,7 +181,7 @@ function ArchiveTable() {
                             >
                               <DeleteForeverIcon
                                 className="cursor-pointer text-red-600"
-                                onClick={() => handleDelete(file)} // ✅ send whole file
+                                onClick={() => handleDelete(file.id)}
                               />
                             </Tooltip>
                           </div>
@@ -243,4 +199,4 @@ function ArchiveTable() {
   );
 }
 
-export default ArchiveTable;
+export default ConfidentialTable;

@@ -4,11 +4,15 @@ import AddFolder from "./AddFolder";
 import api from "../../assets/api";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import RenameFolder from "./RenameFolder";
+import { getUserInfoFromToken } from "../../utils/auth";
 function FoldersTable() {
   const [folders, setFolders] = useState([]);
   const [fileCounts, setFileCounts] = useState({});
   const [folderSizes, setFolderSizes] = useState({});
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("access");
+  const userInfo = getUserInfoFromToken(token);
 
   const fetchFolders = () => {
     setLoading(true);
@@ -47,7 +51,7 @@ function FoldersTable() {
     return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id, folderName) => {
     Swal.fire({
       title: "Are you sure?",
       text: "Deleting this folder will permanently remove all files inside.",
@@ -60,7 +64,7 @@ function FoldersTable() {
       if (result.isConfirmed) {
         api
           .delete(`/api/folders/${id}/delete/`)
-          .then(() => {
+          .then(async () => {
             setFolders((prev) => prev.filter((folder) => folder.id !== id));
             setFileCounts((prev) => {
               const newCounts = { ...prev };
@@ -72,14 +76,31 @@ function FoldersTable() {
               delete newSizes[id];
               return newSizes;
             });
-            Swal.fire(
-              "Deleted!",
-              "Your folder and all its files have been deleted.",
-              "success"
-            );
+
+            await api.post("/api/upload-logs/", {
+              info1: `${userInfo.first_name} deleted the folder "${folderName}"`,
+            });
+
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "success",
+              title: "Folder deleted successfully",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           })
           .catch(() => {
-            Swal.fire("Error", "Failed to delete the folder.", "error");
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "error",
+              title: "Failed to delete folder",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           });
       }
     });
@@ -203,16 +224,22 @@ function FoldersTable() {
                             .replace(/^([A-Za-z]{3})/, "$1.")}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900 mr-3"
-                        >
-                          Edit
-                        </a>
+                      <td className="flex flex-row  items-center justify-end px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <RenameFolder
+                          currentFolderName={folder.name}
+                          folderId={folder.id}
+                          onFolderRenamed={(updatedFolder) =>
+                            setFolders((prev) =>
+                              prev.map((f) =>
+                                f.id === updatedFolder.id ? updatedFolder : f
+                              )
+                            )
+                          }
+                        />
+
                         <button
-                          onClick={() => handleDelete(folder.id)}
-                          className="text-red-600 hover:text-red-900 cursor-pointer"
+                          onClick={() => handleDelete(folder.id, folder.name)}
+                          className="text-red-600 hover:text-red-900 cursor-pointer ml-3"
                         >
                           Delete
                         </button>

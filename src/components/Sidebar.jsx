@@ -66,7 +66,7 @@ function Sidebar() {
       ),
     },
     {
-      to: "/confidential",
+      to: "/confidentials",
       label: "Confidential Files",
       icon: (
         <SecurityIcon

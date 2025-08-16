@@ -48,6 +48,17 @@ const Login = () => {
       localStorage.setItem("refresh", refreshToken);
 
       const payload = JSON.parse(atob(accessToken.split(".")[1]));
+
+      // build log data
+      const logData = {
+        info1: `${payload.first_name} ${payload.last_name} has logged in to the system`,
+      };
+
+      // save log
+      await api.post("/api/upload-logs/", logData, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
       if (payload.is_superuser && payload.is_staff) {
         Swal.fire({
           icon: "success",

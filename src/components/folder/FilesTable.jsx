@@ -37,33 +37,57 @@ function FilesTable({ folderId }) {
     }
   }, [folderId]);
 
-  const handleArchive = (fileId) => {
-  Swal.fire({
-    title: "Archive this file?",
-    text: "You can restore it later from the archive.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#6b21a8",
-    cancelButtonColor: "#6b7280",
-    confirmButtonText: "Yes, archive it",
-    cancelButtonText: "Cancel",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      api
-        .patch(`/api/files/${fileId}/archive/`, {}, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          Swal.fire("Success!", "The file has been moved to archive.", "success");
-          fetchFiles();
-        })
-        .catch(() => {
-          Swal.fire("Error!", "Failed to archive the file.", "error");
-        });
-    }
-  });
-};
+  const handleArchive = (file) => {
+    Swal.fire({
+      title: "Archive this file?",
+      text: "You can restore it later from the archive.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#6b21a8",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, archive it",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .patch(
+            `/api/files/${file.id}/archive/`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then(async () => {
+            await api.post("/api/upload-logs/", {
+              info1: `${userInfo.first_name} moved ${file.file_name} to archive`,
+            });
 
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "success",
+              title: "File moved to archive",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
+
+            fetchFiles();
+          })
+          .catch(() => {
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "error",
+              title: "Failed to archive file",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
+          });
+      }
+    });
+  };
 
   return (
     <div className="w-full flex items-center justify-center min-h-full p-2">
@@ -81,6 +105,7 @@ function FilesTable({ folderId }) {
                 </p>
               </div>
               <FileUpload
+                userName={userInfo.first_name}
                 userId={userInfo.id}
                 folderId={folderId}
                 onUploadSuccess={fetchFiles}
@@ -202,7 +227,7 @@ function FilesTable({ folderId }) {
                             >
                               <DeleteForeverIcon
                                 className="cursor-pointer text-red-600"
-                                onClick={() => handleArchive(file.id)}
+                                onClick={() => handleArchive(file)} // ✅ send file, not just id
                               />
                             </Tooltip>
                           </div>

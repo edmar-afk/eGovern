@@ -21,9 +21,7 @@ function Dashboard() {
             </div>
             <div className="flex flex-row items-center">
               <Folders />
-              <Folders />
-              <Folders />
-              <Folders />
+             
             </div>
           </div>
           <Logs />

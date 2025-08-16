@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import api from "../../assets/api";
 import { getUserInfoFromToken } from "../../utils/auth";
+import Swal from "sweetalert2";
 
 const style = {
   position: "absolute",
@@ -31,33 +32,64 @@ export default function AddFolder({ onFolderCreated }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setError("");
     setName("");
   };
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      setError("Folder name is required");
+      Swal.fire({
+        toast: true,
+        position: "top",
+        icon: "error",
+        title: "Folder name is required",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
       return;
     }
-    setError("");
+
     setLoading(true);
+
     try {
       const res = await api.post(`/api/folders/create/${userInfo.id}/`, {
         name,
       });
+
+      // Log the folder creation
+      await api.post("/api/upload-logs/", {
+        info1: `${userInfo.first_name} added a folder named ${name}`,
+      });
+
       setLoading(false);
       setName("");
       if (onFolderCreated) onFolderCreated(res.data);
       handleClose();
+
+      Swal.fire({
+        toast: true,
+        position: "top",
+        icon: "success",
+        title: "Folder created successfully",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     } catch (err) {
       setLoading(false);
-      setError(err.response?.data?.name || "Failed to create folder");
+      Swal.fire({
+        toast: true,
+        position: "top",
+        icon: "error",
+        title: err.response?.data?.name || "Failed to create folder",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
@@ -85,8 +117,6 @@ export default function AddFolder({ onFolderCreated }) {
               fullWidth
               value={name}
               onChange={(e) => setName(e.target.value)}
-              error={!!error}
-              helperText={error}
               margin="normal"
             />
             <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>

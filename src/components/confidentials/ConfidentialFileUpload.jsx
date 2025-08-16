@@ -11,14 +11,17 @@ import CloseIcon from "@mui/icons-material/Close";
 import api from "../../assets/api";
 import mammoth from "mammoth";
 import Swal from "sweetalert2";
-
-function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
+import { getUserInfoFromToken } from "../../utils/auth";
+function ConfidentialFileUpload({ onUploadSuccess }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [docxContent, setDocxContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const token = localStorage.getItem("access");
+  const userInfo = getUserInfoFromToken(token);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -28,14 +31,6 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
     setError(false);
     setOpen(false);
   };
-
-  const formatSize = (bytes) => {
-  if (!bytes) return "0 B";
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
-};
-
 
   const handleFileSelect = async (selectedFile) => {
     setFile(selectedFile);
@@ -62,9 +57,9 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
       fileType.includes("presentation") ||
       fileType.includes("spreadsheet")
     ) {
-      setDocxContent("Preview not available for this file type.");
+      setDocxContent("Preview not available for this confidential file type.");
     } else {
-      setDocxContent("Preview not available for this file type.");
+      setDocxContent("Preview not available for this confidential file type.");
     }
   };
 
@@ -97,18 +92,8 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
     formData.append("file_name", file.name);
 
     try {
-      await api.post(`/api/file/${folderId}/upload/${userId}/`, formData, {
+      await api.post(`/api/file/upload/${userInfo.id}/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      // ✅ Log after successful upload
-      const extension = file.name.split(".").pop();
-      const fileSize = formatSize(file.size);
-
-      await api.post("/api/upload-logs/", {
-        info1: `${userName} uploaded a file named "${file.name}"`,
-        info2: extension,
-        info3: fileSize,
       });
 
       if (typeof onUploadSuccess === "function") {
@@ -119,7 +104,7 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
         toast: true,
         position: "top",
         icon: "success",
-        title: "File uploaded successfully",
+        title: "Confidential file uploaded successfully",
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true,
@@ -132,7 +117,7 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
         toast: true,
         position: "top",
         icon: "error",
-        title: "File upload failed",
+        title: "Confidential file upload failed",
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true,
@@ -144,8 +129,12 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
 
   return (
     <>
-      <Button variant="contained" onClick={handleOpen}>
-        Upload File
+      <Button
+        variant="contained"
+        onClick={handleOpen}
+        sx={{ whiteSpace: "nowrap", px: 5 }}
+      >
+        Upload Confidential File
       </Button>
 
       <Modal open={open} onClose={handleClose}>
@@ -167,7 +156,7 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h6">Upload File</Typography>
+            <Typography variant="h6">Upload Confidential File</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
@@ -211,8 +200,8 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
                   <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
                 </svg>
                 {error
-                  ? "Please upload file first"
-                  : "Drag & drop or click to upload"}
+                  ? "Please upload confidential file first"
+                  : "Drag & drop or click to upload confidential file"}
               </>
             )}
             <input
@@ -228,7 +217,8 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
               You are about to upload{" "}
               <span className="font-bold text-purple-700 not-italic">
                 {file.name}
-              </span>
+              </span>{" "}
+              as a confidential file
             </p>
           )}
 
@@ -238,7 +228,11 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
               onClick={handleUpload}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : "Upload"}
+              {loading ? (
+                <CircularProgress size={24} />
+              ) : (
+                "Upload Confidential File"
+              )}
             </Button>
           </Box>
         </Box>
@@ -247,4 +241,4 @@ function FileUpload({ folderId, userId, onUploadSuccess, userName }) {
   );
 }
 
-export default FileUpload;
+export default ConfidentialFileUpload;
