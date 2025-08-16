@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import RenameFolder from "./RenameFolder";
 import { getUserInfoFromToken } from "../../utils/auth";
+import Search from "../Search";
 function FoldersTable() {
   const [folders, setFolders] = useState([]);
   const [fileCounts, setFileCounts] = useState({});
@@ -13,6 +14,11 @@ function FoldersTable() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access");
   const userInfo = getUserInfoFromToken(token);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredFolders = folders.filter((folder) =>
+    folder.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchFolders = () => {
     setLoading(true);
@@ -126,6 +132,9 @@ function FoldersTable() {
               </div>
               <AddFolder onFolderCreated={handleFolderCreated} />
             </div>
+
+            <Search name="Folder" onSearch={setSearchQuery} />
+
           </div>
 
           <div className="overflow-x-auto">
@@ -169,7 +178,7 @@ function FoldersTable() {
                     </td>
                   </tr>
                 ) : (
-                  folders.map((folder) => (
+                  filteredFolders.map((folder) => (
                     <tr
                       key={folder.id}
                       className="hover:bg-gray-50 transition-colors duration-150"

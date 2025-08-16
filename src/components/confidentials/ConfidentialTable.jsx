@@ -6,11 +6,17 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
 import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
 import ConfidentialFileUpload from "./ConfidentialFileUpload";
+import Search from "../Search";
 
 function ConfidentialTable() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredFiles = files.filter((file) =>
+    file.file_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchFiles = () => {
     setLoading(true);
@@ -49,19 +55,27 @@ function ConfidentialTable() {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(() => {
-            Swal.fire(
-              "Deleted!",
-              "The confidential file has been permanently deleted.",
-              "success"
-            );
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "success",
+              title: "The confidential file has been permanently deleted.",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
             fetchFiles();
           })
           .catch(() => {
-            Swal.fire(
-              "Error!",
-              "Failed to delete the confidential file.",
-              "error"
-            );
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "error",
+              title: "Failed to delete the confidential file.",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           });
       }
     });
@@ -85,6 +99,7 @@ function ConfidentialTable() {
               </div>
               <ConfidentialFileUpload onUploadSuccess={fetchFiles} />
             </div>
+            <Search name="Confidential File" onSearch={setSearchQuery} />
           </div>
 
           <div className="overflow-x-auto">
@@ -129,12 +144,11 @@ function ConfidentialTable() {
                     </td>
                   </tr>
                 ) : (
-                  files.map((file) => {
+                  filteredFiles.map((file) => {
                     const fileParts = file.file_name.split(".");
                     const extension =
                       fileParts.length > 1 ? fileParts.pop() : "";
                     const nameWithoutExt = fileParts.join(".");
-
                     return (
                       <tr
                         key={file.id}

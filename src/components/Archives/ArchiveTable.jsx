@@ -6,11 +6,17 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
 import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
 import { getUserInfoFromToken } from "../../utils/auth";
+import Search from "../Search";
 function ArchiveTable() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access");
   const userInfo = getUserInfoFromToken(token);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredFiles = files.filter((file) =>
+    file.file_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchFiles = () => {
     setLoading(true);
@@ -121,6 +127,7 @@ function ArchiveTable() {
               Manage your archived files here. You can restore them anytime or
               permanently delete them.
             </p>
+            <Search name="Archives" onSearch={setSearchQuery} />
           </div>
 
           <div className="overflow-x-auto">
@@ -167,12 +174,11 @@ function ArchiveTable() {
                     </td>
                   </tr>
                 ) : (
-                  files.map((file) => {
+                  filteredFiles.map((file) => {
                     const fileParts = file.file_name.split(".");
                     const extension =
                       fileParts.length > 1 ? fileParts.pop() : "";
                     const nameWithoutExt = fileParts.join(".");
-
                     return (
                       <tr
                         key={file.id}

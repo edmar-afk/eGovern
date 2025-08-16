@@ -8,6 +8,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import { Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
+import Search from "../Search";
 function FilesTable({ folderId }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,11 @@ function FilesTable({ folderId }) {
 
   const location = useLocation();
   const folderName = location.state?.folderName;
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredFiles = files.filter((file) =>
+    file.file_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchFiles = () => {
     setLoading(true);
@@ -111,6 +117,7 @@ function FilesTable({ folderId }) {
                 onUploadSuccess={fetchFiles}
               />
             </div>
+            <Search name={"Files"} onSearch={setSearchQuery} />
           </div>
 
           <div className="overflow-x-auto">
@@ -157,12 +164,11 @@ function FilesTable({ folderId }) {
                     </td>
                   </tr>
                 ) : (
-                  files.map((file) => {
+                  filteredFiles.map((file) => {
                     const fileParts = file.file_name.split(".");
                     const extension =
                       fileParts.length > 1 ? fileParts.pop() : "";
                     const nameWithoutExt = fileParts.join(".");
-
                     return (
                       <tr
                         key={file.id}
