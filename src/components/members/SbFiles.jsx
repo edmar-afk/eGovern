@@ -12,6 +12,7 @@ import Search from "./Search";
 function SbFiles() {
   const { folderId } = useParams();
   const [files, setFiles] = useState([]);
+  const [search, setSearch] = useState("");
   const location = useLocation();
   const folderName = location.state?.folderName;
 
@@ -32,15 +33,20 @@ function SbFiles() {
     if (ext === "pdf") return pdfImg;
     if (ext === "ppt" || ext === "pptx") return pptImg;
     if (ext === "xls" || ext === "xlsx") return xlsImg;
-    return fileUrl; // for images, show actual file
+    return fileUrl;
   };
+
+  // filter files
+  const filteredFiles = files.filter((file) =>
+    file.file_name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <>
       <Header />
-      <div class="mb-5 flex justify-between text-sm px-5 sm:px-10 md:px-16 pt-24">
-        <div class="text-purple-600 flex items-center pb-2 pr-2 uppercase">
-          <div class="font-semibold flex flex-row items-center text-2xl">
+      <div className="mb-5 flex justify-between text-sm px-5 sm:px-10 md:px-16 pt-24">
+        <div className="text-purple-600 flex items-center pb-2 pr-2 uppercase">
+          <div className="font-semibold flex flex-row items-center text-2xl">
             <Link to={"/sb-dashboard"}>HOME</Link>{" "}
             <NavigateNextIcon fontSize="small" className="text-gray-800" />{" "}
             <p className="text-gray-800">Folder</p>
@@ -48,10 +54,11 @@ function SbFiles() {
             <p className="text-gray-800">{folderName}</p>
           </div>
         </div>
-        <Search />
+        <Search search={search} setSearch={setSearch} />
       </div>
+
       <div className="flex flex-wrap gap-5 px-5 sm:px-10 md:px-16">
-        {files.map((file) => (
+        {filteredFiles.map((file) => (
           <div
             key={file.id}
             className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"
@@ -65,7 +72,6 @@ function SbFiles() {
               <h5 className="mb-1 text-xl font-medium text-gray-900 break-all text-center mx-12">
                 {file.file_name}
               </h5>
-
               <span className="text-sm text-gray-500">
                 Uploaded by: {file.uploaded_by.username}
               </span>

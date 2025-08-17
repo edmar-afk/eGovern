@@ -9,6 +9,7 @@ import { Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
 import Search from "../Search";
+import MsViewer from "../MsViewer";
 function FilesTable({ folderId }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -236,6 +237,10 @@ function FilesTable({ folderId }) {
                                 onClick={() => handleArchive(file)} // ✅ send file, not just id
                               />
                             </Tooltip>
+                            <MsViewer
+                              fileUrl={file.file}
+                              extension={extension.toLowerCase()}
+                            />
                           </div>
                         </td>
                       </tr>
