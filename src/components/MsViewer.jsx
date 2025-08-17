@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Box, Button } from "@mui/material";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
 function MsViewer({ fileUrl, extension }) {
   const [open, setOpen] = useState(false);
-  console.log('url of file in msviewer: ', fileUrl)
+  console.log("url of file in msviewer: ", fileUrl);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -12,7 +12,9 @@ function MsViewer({ fileUrl, extension }) {
   if (extension === "pdf") {
     // browser can render PDF directly
     viewerUrl = fileUrl;
-  } else if (["doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(extension)) {
+  } else if (
+    ["doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(extension)
+  ) {
     // Use Microsoft Office Online viewer
     viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
       fileUrl
@@ -21,14 +23,9 @@ function MsViewer({ fileUrl, extension }) {
 
   return (
     <>
-      <Button
-        size="small"
-        variant="outlined"
-        onClick={handleOpen}
-        sx={{ ml: 1 }}
-      >
-        View
-      </Button>
+      <button onClick={handleOpen} className="text-blue-600 ml-2 hover:scale-110 duration-300 cursor-pointer">
+        <VisibilityIcon />
+      </button>
 
       <Modal open={open} onClose={handleClose}>
         <Box
@@ -58,7 +55,11 @@ function MsViewer({ fileUrl, extension }) {
               <p>Preview not available for this file type.</p>
             )}
           </Box>
-          <Button onClick={handleClose} variant="contained" sx={{ mt: 1, width:'100px' }}>
+          <Button
+            onClick={handleClose}
+            variant="contained"
+            sx={{ mt: 1, width: "100px" }}
+          >
             Close
           </Button>
         </Box>

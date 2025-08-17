@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StorageIcon from "@mui/icons-material/Storage";
-import HelpIcon from "@mui/icons-material/Help";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import api from "../../assets/api";
+
 function Storage() {
-  const max = 500;
-  const used = 500;
-  const percent = (used / max) * 100;
+  const [usedBytes, setUsedBytes] = useState(0);
+  const [usedHuman, setUsedHuman] = useState("0 MB");
+  const [loading, setLoading] = useState(false);
+  const max = 500 * 1024 * 1024; // 500 MB in bytes
+
+  const fetchStorage = () => {
+    setLoading(true);
+    api
+      .get("/api/files/total-size/")
+      .then((res) => {
+        setUsedBytes(res.data.total_size_bytes);
+        setUsedHuman(res.data.total_size_human);
+      })
+      .catch((err) => {
+        console.error("Error fetching storage size:", err);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchStorage();
+  }, []);
+
+  const percent = Math.min((usedBytes / max) * 100, 100);
+
   return (
     <>
       <div className="mt-8">
@@ -14,12 +38,16 @@ function Storage() {
         </div>
 
         <p className="text-xs my-1 mr-2 text-gray-600 text-right flex justify-end items-center">
-          {used}MB of {max}MB used{" "}
-          <HelpIcon
+          {usedHuman} of 500MB used{" "}
+          <RefreshIcon
+            onClick={fetchStorage}
             fontSize="small"
-            className="text-purple-600 ml-2 mb-0.5 animate-pulse"
+            className={`ml-2 mb-0.5 cursor-pointer ${
+              loading ? "animate-spin text-blue-600" : "text-purple-600"
+            }`}
           />
         </p>
+
         <div className="w-full h-3 rounded-full bg-gray-200 overflow-hidden">
           <div
             className="h-full rounded-full"

@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
 import ConfidentialFileUpload from "./ConfidentialFileUpload";
 import Search from "../Search";
+import PassKey from "./PassKey";
 
 function ConfidentialTable() {
   const [files, setFiles] = useState([]);
@@ -82,134 +83,137 @@ function ConfidentialTable() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center min-h-full p-2">
-      <div className="container">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row items-center justify-between">
-              <div className="">
-                <h2 className="text-xl font-bold text-gray-800">
-                  Confidential Files
-                </h2>
-                <p className="text-red-600 mt-1 text-sm w-full sm:w-[70%] font-extralight">
-                  Warning: Confidential files are strictly managed. Deleting a
-                  file will permanently remove it, it will not be archived, and
-                  it cannot be restored. Proceed with caution.
-                </p>
+    <>
+    <PassKey/>
+      <div className="w-full flex items-center justify-center min-h-full p-2">
+        <div className="container">
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row items-center justify-between">
+                <div className="">
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Confidential Files
+                  </h2>
+                  <p className="text-red-600 mt-1 text-sm w-full sm:w-[70%] font-extralight">
+                    Warning: Confidential files are strictly managed. Deleting a
+                    file will permanently remove it, it will not be archived,
+                    and it cannot be restored. Proceed with caution.
+                  </p>
+                </div>
+                <ConfidentialFileUpload onUploadSuccess={fetchFiles} />
               </div>
-              <ConfidentialFileUpload onUploadSuccess={fetchFiles} />
+              <Search name="Confidential File" onSearch={setSearchQuery} />
             </div>
-            <Search name="Confidential File" onSearch={setSearchQuery} />
-          </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    File Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    File Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    File Size
-                  </th>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      File Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      File Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      File Size
+                    </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Date Uploaded
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {loading ? (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-6 py-4 text-center text-gray-500"
-                    >
-                      Loading Confidential Files...
-                    </td>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Date Uploaded
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Actions
+                    </th>
                   </tr>
-                ) : files.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-6 py-4 text-center text-gray-500"
-                    >
-                      No confidential files found.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredFiles.map((file) => {
-                    const fileParts = file.file_name.split(".");
-                    const extension =
-                      fileParts.length > 1 ? fileParts.pop() : "";
-                    const nameWithoutExt = fileParts.join(".");
-                    return (
-                      <tr
-                        key={file.id}
-                        className="hover:bg-gray-50 transition-colors"
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {loading ? (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="px-6 py-4 text-center text-gray-500"
                       >
-                        <td className="px-6 py-4">
-                          <div className="flex items-center">
-                            <InsertDriveFileIcon className="text-blue-500" />
-                            <a
-                              href={file.file}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="ml-4 text-sm font-medium text-indigo-600 hover:underline"
-                            >
-                              {nameWithoutExt}
-                            </a>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          {extension.toUpperCase()}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          {file.file_size_human}
-                        </td>
+                        Loading Confidential Files...
+                      </td>
+                    </tr>
+                  ) : files.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="px-6 py-4 text-center text-gray-500"
+                      >
+                        No confidential files found.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredFiles.map((file) => {
+                      const fileParts = file.file_name.split(".");
+                      const extension =
+                        fileParts.length > 1 ? fileParts.pop() : "";
+                      const nameWithoutExt = fileParts.join(".");
+                      return (
+                        <tr
+                          key={file.id}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center">
+                              <InsertDriveFileIcon className="text-blue-500" />
+                              <a
+                                href={file.file}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ml-4 text-sm font-medium text-indigo-600 hover:underline"
+                              >
+                                {nameWithoutExt}
+                              </a>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            {extension.toUpperCase()}
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            {file.file_size_human}
+                          </td>
 
-                        <td className="px-6 py-4 text-sm">
-                          {new Date(file.date_creation)
-                            .toLocaleString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "2-digit",
-                              hour12: true,
-                            })
-                            .replace(/^([A-Za-z]{3})/, "$1.")}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="flex gap-3">
-                            <Tooltip
-                              title="Delete Permanently"
-                              arrow
-                              placement="top"
-                            >
-                              <DeleteForeverIcon
-                                className="cursor-pointer text-red-600"
-                                onClick={() => handleDelete(file.id)}
-                              />
-                            </Tooltip>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                          <td className="px-6 py-4 text-sm">
+                            {new Date(file.date_creation)
+                              .toLocaleString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              })
+                              .replace(/^([A-Za-z]{3})/, "$1.")}
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <div className="flex gap-3">
+                              <Tooltip
+                                title="Delete Permanently"
+                                arrow
+                                placement="top"
+                              >
+                                <DeleteForeverIcon
+                                  className="cursor-pointer text-red-600"
+                                  onClick={() => handleDelete(file.id)}
+                                />
+                              </Tooltip>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

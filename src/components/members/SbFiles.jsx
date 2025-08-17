@@ -8,6 +8,7 @@ import xlsImg from "../../assets/images/filesImg/xls.png";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Header from "./Header";
 import Search from "./Search";
+import MsViewer from "../MsViewer";
 
 function SbFiles() {
   const { folderId } = useParams();
@@ -15,6 +16,10 @@ function SbFiles() {
   const [search, setSearch] = useState("");
   const location = useLocation();
   const folderName = location.state?.folderName;
+
+  const getFileExtension = (fileName) => {
+    return fileName.split(".").pop().toLowerCase();
+  };
 
   useEffect(() => {
     api
@@ -83,9 +88,10 @@ function SbFiles() {
                 >
                   Download
                 </a>
-                <button className="ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800">
-                  View
-                </button>
+                <MsViewer
+                  fileUrl={file.file}
+                  extension={getFileExtension(file.file_name)}
+                />
               </div>
             </div>
           </div>
