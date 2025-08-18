@@ -129,8 +129,8 @@ function Sidebar() {
           sx={{ width: 48, height: 48, borderRadius: "50%" }}
           alt="logo"
         />
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          eGovern
+        <Typography variant="p" sx={{ fontWeight: 600 }}>
+          eGovern Admin
         </Typography>
       </Toolbar>
       <Divider />
