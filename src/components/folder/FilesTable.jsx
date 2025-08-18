@@ -10,12 +10,16 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Swal from "sweetalert2";
 import Search from "../Search";
 import MsViewer from "../MsViewer";
+import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
+import PrintModal from "./PrintModal";
+import CircularProgress from "@mui/material/CircularProgress";
+
 function FilesTable({ folderId }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access");
   const userInfo = getUserInfoFromToken(token);
-
+  const [printingId, setPrintingId] = useState(null); // track which file is printing
   const location = useLocation();
   const folderName = location.state?.folderName;
   const [searchQuery, setSearchQuery] = useState("");
@@ -94,6 +98,28 @@ function FilesTable({ folderId }) {
           });
       }
     });
+  };
+
+  const handlePrint = async (file) => {
+    setPrintingId(file.id); // show spinner for this file
+    try {
+      const res = await api.post("/api/convert-to-pdf/", {
+        fileUrl: file.file,
+      });
+      const pdfUrl = res.data.pdf_url;
+
+      const win = window.open(pdfUrl, "_blank");
+      if (win) {
+        win.onload = () => {
+          win.focus();
+          win.print();
+        };
+      }
+    } catch (error) {
+      console.error("Failed to convert and print file", error);
+    } finally {
+      setPrintingId(null); // reset spinner
+    }
   };
 
   return (
@@ -241,6 +267,31 @@ function FilesTable({ folderId }) {
                               fileUrl={file.file}
                               extension={extension.toLowerCase()}
                             />
+                            <Tooltip
+                              title="Print"
+                              arrow
+                              placement="top"
+                              componentsProps={{
+                                tooltip: {
+                                  sx: {
+                                    backgroundColor: "#6b21a8",
+                                    color: "#fff",
+                                    fontSize: "0.75rem",
+                                    borderRadius: "6px",
+                                  },
+                                },
+                                arrow: { sx: { color: "#6b21a8" } },
+                              }}
+                            >
+                              {printingId === file.id ? (
+                                <CircularProgress size={22} color="secondary" />
+                              ) : (
+                                <LocalPrintshopIcon
+                                  className="cursor-pointer"
+                                  onClick={() => handlePrint(file)}
+                                />
+                              )}
+                            </Tooltip>
                           </div>
                         </td>
                       </tr>

@@ -1,29 +1,42 @@
 import React, { useState } from "react";
 import { Modal, Box, Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import PrintIcon from "@mui/icons-material/Print";
+
 function MsViewer({ fileUrl, extension }) {
   const [open, setOpen] = useState(false);
   console.log("url of file in msviewer: ", fileUrl);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   let viewerUrl = "";
-
   if (extension === "pdf") {
-    // browser can render PDF directly
     viewerUrl = fileUrl;
-  } else if (
-    ["doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(extension)
-  ) {
-    // Use Microsoft Office Online viewer
-    viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-      fileUrl
-    )}`;
+  } else if (["doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(extension)) {
+    viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
   }
+
+  const handlePrint = () => {
+    if (extension === "pdf") {
+      const newWin = window.open(fileUrl, "_blank");
+      newWin.focus();
+      newWin.print();
+    } else {
+      const newWin = window.open(
+        `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(fileUrl)}`,
+        "_blank"
+      );
+      newWin.focus();
+    }
+  };
 
   return (
     <>
-      <button onClick={handleOpen} className="text-blue-600 ml-2 hover:scale-110 duration-300 cursor-pointer">
+      <button
+        onClick={handleOpen}
+        className="text-blue-600 mx-2 hover:scale-110 duration-300 cursor-pointer"
+      >
         <VisibilityIcon />
       </button>
 
@@ -55,13 +68,22 @@ function MsViewer({ fileUrl, extension }) {
               <p>Preview not available for this file type.</p>
             )}
           </Box>
-          <Button
-            onClick={handleClose}
-            variant="contained"
-            sx={{ mt: 1, width: "100px" }}
-          >
-            Close
-          </Button>
+          <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+            <Button
+              onClick={handlePrint}
+              variant="outlined"
+              startIcon={<PrintIcon />}
+            >
+              Print
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              sx={{ width: "100px" }}
+            >
+              Close
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </>
