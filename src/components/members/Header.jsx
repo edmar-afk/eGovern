@@ -47,14 +47,6 @@ function Header() {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <LockIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Confidential Files" />
-          </ListItemButton>
-        </ListItem>
       </List>
     </Box>
   );

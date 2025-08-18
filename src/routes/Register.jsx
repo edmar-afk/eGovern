@@ -198,7 +198,7 @@ const Register = () => {
                 <p className="text-red-600 text-sm">Passwords do not match</p>
               )}
 
-              <div className="flex flex-col gap-1">
+              {/* <div className="flex flex-col gap-1">
                 <Button
                   variant="contained"
                   startIcon={<ImageIcon />}
@@ -217,7 +217,7 @@ const Register = () => {
                 {fileError && (
                   <p className="text-red-600 text-sm">{fileError}</p>
                 )}
-              </div>
+              </div> */}
 
               <button
                 type="submit"
