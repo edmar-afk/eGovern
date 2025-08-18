@@ -17,19 +17,19 @@ function MsViewer({ fileUrl, extension }) {
     viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
   }
 
-  const handlePrint = () => {
-    if (extension === "pdf") {
-      const newWin = window.open(fileUrl, "_blank");
-      newWin.focus();
-      newWin.print();
-    } else {
-      const newWin = window.open(
-        `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(fileUrl)}`,
-        "_blank"
-      );
-      newWin.focus();
-    }
-  };
+  // const handlePrint = () => {
+  //   if (extension === "pdf") {
+  //     const newWin = window.open(fileUrl, "_blank");
+  //     newWin.focus();
+  //     newWin.print();
+  //   } else {
+  //     const newWin = window.open(
+  //       `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(fileUrl)}`,
+  //       "_blank"
+  //     );
+  //     newWin.focus();
+  //   }
+  // };
 
   return (
     <>
@@ -69,13 +69,7 @@ function MsViewer({ fileUrl, extension }) {
             )}
           </Box>
           <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
-            <Button
-              onClick={handlePrint}
-              variant="outlined"
-              startIcon={<PrintIcon />}
-            >
-              Print
-            </Button>
+           
             <Button
               onClick={handleClose}
               variant="contained"
