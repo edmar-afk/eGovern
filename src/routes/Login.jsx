@@ -4,9 +4,13 @@ import logo from "../assets/images/logo.jpg";
 import api from "../assets/api";
 import Swal from "sweetalert2";
 import CircularProgress from "@mui/material/CircularProgress";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -43,22 +47,15 @@ const Login = () => {
       const res = await api.post("/api/login/", formData);
       const accessToken = res.data.access;
       const refreshToken = res.data.refresh;
-
       localStorage.setItem("access", accessToken);
       localStorage.setItem("refresh", refreshToken);
-
       const payload = JSON.parse(atob(accessToken.split(".")[1]));
-
-      // build log data
       const logData = {
         info1: `${payload.first_name} ${payload.last_name} has logged in to the system`,
       };
-
-      // save log
       await api.post("/api/upload-logs/", logData, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-
       if (payload.is_superuser && payload.is_staff) {
         Swal.fire({
           icon: "success",
@@ -138,15 +135,23 @@ const Login = () => {
                   <label className="text-slate-900 text-sm font-medium mb-2 block">
                     Password
                   </label>
-                  <input
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="w-full text-slate-900 text-sm border border-slate-300 px-4 py-3 rounded-md outline-blue-600"
-                    placeholder="Enter password"
-                  />
+                  <div className="relative">
+                    <input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="w-full text-slate-900 text-sm border border-slate-300 px-4 py-3 rounded-md outline-blue-600 pr-10"
+                      placeholder="Enter password"
+                    />
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="!absolute right-2 top-1/2 -translate-y-1/2"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
                 </div>
 
                 <div className="!mt-12">
