@@ -124,8 +124,8 @@ function ArchiveTable() {
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-800">Archived Files</h2>
             <p className="text-gray-500 mt-1">
-              Manage your archived files here. You can restore them anytime or
-              permanently delete them.
+              Manage your archived files here. You can restore them to their
+              original state at any time or keep them archived.
             </p>
             <Search name="Archives" onSearch={setSearchQuery} />
           </div>
