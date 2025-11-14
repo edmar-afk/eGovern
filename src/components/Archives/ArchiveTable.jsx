@@ -224,7 +224,7 @@ function ArchiveTable() {
                                 onClick={() => handleRestore(file)} // ✅ send whole file
                               />
                             </Tooltip>
-                            <Tooltip
+                            {/* <Tooltip
                               title="Delete Permanently"
                               arrow
                               placement="top"
@@ -233,7 +233,7 @@ function ArchiveTable() {
                                 className="cursor-pointer text-red-600"
                                 onClick={() => handleDelete(file)} // ✅ send whole file
                               />
-                            </Tooltip>
+                            </Tooltip> */}
                           </div>
                         </td>
                       </tr>
