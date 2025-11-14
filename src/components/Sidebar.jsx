@@ -50,21 +50,21 @@ function Sidebar() {
         />
       ),
     },
-    // {
-    //   to: "/staffs",
-    //   label: "Staffs",
-    //   icon: (
-    //     <PeopleAltIcon
-    //       fontSize="large"
-    //       sx={{
-    //         bgcolor: "rgb(134,239,172)",
-    //         color: "rgb(22,101,52)",
-    //         p: 1,
-    //         borderRadius: "50%",
-    //       }}
-    //     />
-    //   ),
-    // },
+    {
+      to: "/staffs",
+      label: "Staffs",
+      icon: (
+        <PeopleAltIcon
+          fontSize="large"
+          sx={{
+            bgcolor: "rgb(134,239,172)",
+            color: "rgb(22,101,52)",
+            p: 1,
+            borderRadius: "50%",
+          }}
+        />
+      ),
+    },
     {
       to: "/confidentials",
       label: "Confidential Files",

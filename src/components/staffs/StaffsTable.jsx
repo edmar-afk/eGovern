@@ -1,140 +1,137 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../assets/api";
+import Swal from "sweetalert2";
 
 function StaffsTable() {
+  const [users, setUsers] = useState([]);
+  console.log(users);
+  useEffect(() => {
+    api.get("/api/non-staff-users/").then((res) => {
+      setUsers(res.data);
+    });
+  }, []);
+
+  const handleDelete = (userId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Delete",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .delete(`/api/users/${userId}/delete/`)
+          .then(() => {
+            setUsers(users.filter((u) => u.id !== userId));
+            Swal.fire("Deleted!", "User has been deleted.", "success");
+          })
+          .catch(() => {
+            Swal.fire("Error", "Failed to delete user.", "error");
+          });
+      }
+    });
+  };
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   return (
     <>
-      <div class="w-full flex items-center justify-center min-h-full p-2">
-        <div class="container">
-          <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="p-6 border-b border-gray-200">
-              <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="w-full flex items-center justify-center min-h-full p-2">
+        <div className="container">
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 class="text-xl font-bold text-gray-800">Staff Members</h2>
-                  <p class="text-gray-500 mt-1">
+                  <h2 className="text-xl font-bold text-gray-800">Staff Members</h2>
+                  <p className="text-gray-500 mt-1">
                     Manage your team staff and their account permissions here.
                   </p>
                 </div>
               </div>
-
-              <div class="mt-6 flex flex-col sm:flex-row gap-4">
-                <div class="relative flex-grow">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full "
-                    placeholder="Search Staffs..."
-                  />
-                </div>
-                <div>
-                  <select class="border border-gray-300 rounded-lg px-4 py-2  w-full sm:w-auto">
-                    <option value="">Admin</option>
-                    <option value="engineering">Other</option>
-                    <option value="design">Other</option>
-                    <option value="marketing">Other</option>
-                    <option value="sales">Other</option>
-                  </select>
-                </div>
-              </div>
             </div>
 
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
-
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr class="hover:bg-gray-50 transition-colors duration-150">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <div class="h-10 w-10 flex-shrink-0">
-                          <img
-                            class="h-10 w-10 rounded-full object-cover"
-                            src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"
-                            alt=""
-                          />
-                        </div>
-                        <div class="ml-4">
-                          <div class="text-sm font-medium text-gray-900">
-                            Edmar Jay Heolin
+
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr
+                      key={user.id}
+                      className="hover:bg-gray-50 transition-colors duration-150"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 flex-shrink-0">
+                            <img
+                              className="h-10 w-10 rounded-full object-cover"
+                              src={
+                                user.profile_picture
+                                  ? `${BASE_URL}${user.profile_picture}`
+                                  : "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"
+                              }
+                              alt=""
+                            />
                           </div>
-                          <div class="text-sm text-gray-500">
-                            jaywrsnp6@gmail.com
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {user.username}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {user.first_name}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">Admin</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a
-                        href="#"
-                        class="text-indigo-600 hover:text-indigo-900 mr-3"
-                      >
-                        Edit
-                      </a>
-                      <a href="#" class="text-red-600 hover:text-red-900">
-                        Delete
-                      </a>
-                    </td>
-                  </tr>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">User</div>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          {user.status}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
-            <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-              <div class="flex items-center justify-between flex-col sm:flex-row">
-                <div class="mb-4 sm:mb-0">
-                  <p class="text-sm text-gray-700">
-                    Showing
-                    <span class="font-medium"> 1</span> results
-                  </p>
-                </div>
+            <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+              <div className="flex items-center justify-between flex-col sm:flex-row">
+                <p className="text-sm text-gray-700">
+                  Showing <span className="font-medium">{users.length}</span>{" "}
+                  results
+                </p>
               </div>
             </div>
           </div>
