@@ -26,7 +26,7 @@ import { useTheme } from "@mui/material/styles";
 import RecentUploads from "./sidebar/RecentUploads";
 import Storage from "./sidebar/Storage";
 import logo from "../assets/images/logo.jpg";
-
+import BackupTableIcon from "@mui/icons-material/BackupTable";
 const drawerWidth = 260;
 
 function Sidebar() {
@@ -104,6 +104,21 @@ function Sidebar() {
           sx={{
             bgcolor: "rgb(254,215,170)",
             color: "rgb(154,52,18)",
+            p: 1,
+            borderRadius: "50%",
+          }}
+        />
+      ),
+    },
+    {
+      to: "/backups",
+      label: "Backup Files",
+      icon: (
+        <BackupTableIcon
+          fontSize="large"
+          sx={{
+            bgcolor: "rgb(234,179,8)",
+            color: "rgb(255,255,255)",
             p: 1,
             borderRadius: "50%",
           }}

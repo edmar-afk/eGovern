@@ -13,7 +13,8 @@ import MsViewer from "../MsViewer";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import PrintModal from "./PrintModal";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import ArchiveIcon from "@mui/icons-material/Archive";
+import DeleteIcon from '@mui/icons-material/Delete';
 function FilesTable({ folderId }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,6 +79,59 @@ function FilesTable({ folderId }) {
               position: "top",
               icon: "success",
               title: "File moved to archive",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
+
+            fetchFiles();
+          })
+          .catch(() => {
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "error",
+              title: "Failed to archive file",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
+          });
+      }
+    });
+  };
+
+
+  const handleBackup = (file) => {
+    Swal.fire({
+      title: "Delete this file?",
+      text: "You can restore it later from the Backup.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#6b21a8",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Delete it",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .patch(
+            `/api/set-backup/${file.id}/`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then(async () => {
+            await api.post("/api/upload-logs/", {
+              info1: `${userInfo.first_name} deleted ${file.file_name}`,
+            });
+
+            Swal.fire({
+              toast: true,
+              position: "top",
+              icon: "success",
+              title: "File Deleted",
               showConfirmButton: false,
               timer: 2000,
               timerProgressBar: true,
@@ -247,6 +301,31 @@ function FilesTable({ folderId }) {
                               componentsProps={{
                                 tooltip: {
                                   sx: {
+                                    bgcolor: "red",
+                                    "& .MuiTooltip-tooltip": {
+                                      color: "red",
+                                    },
+                                    fontSize: "0.75rem",
+                                    borderRadius: "6px",
+                                  },
+                                },
+                                arrow: {
+                                  sx: { color: "red" },
+                                },
+                              }}
+                            >
+                              <DeleteIcon
+                                className="cursor-pointer text-red-600"
+                                onClick={() => handleBackup(file)} // ✅ send file, not just id
+                              />
+                            </Tooltip>
+                            <Tooltip
+                              title="Archive"
+                              arrow
+                              placement="top"
+                              componentsProps={{
+                                tooltip: {
+                                  sx: {
                                     backgroundColor: "#6b21a8",
                                     color: "#fff",
                                     fontSize: "0.75rem",
@@ -258,8 +337,8 @@ function FilesTable({ folderId }) {
                                 },
                               }}
                             >
-                              <DeleteForeverIcon
-                                className="cursor-pointer text-red-600"
+                              <ArchiveIcon
+                                className="cursor-pointer text-blue-600"
                                 onClick={() => handleArchive(file)} // ✅ send file, not just id
                               />
                             </Tooltip>

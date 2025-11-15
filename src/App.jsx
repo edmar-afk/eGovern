@@ -10,6 +10,7 @@ import SbDashboard from "./routes/SbDashboard";
 import SbFiles from "./components/members/SbFiles";
 import Archives from "./routes/Archives";
 import Confidentials from "./routes/Confidentials";
+import Backups from "./routes/Backups";
 function Logout() {
   localStorage.clear();
   return <Navigate to="/" />;
@@ -29,6 +30,7 @@ function App() {
         <Route path="/folders" element={<Folders />} />
         <Route path="/archives" element={<Archives />} />
         <Route path="/confidentials" element={<Confidentials />} />
+        <Route path="/backups" element={<Backups />} />
         <Route path="/open-folder/:id" element={<OpenFolder />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
