@@ -219,7 +219,7 @@ function ArchiveTable() {
                             })
                             .replace(/^([A-Za-z]{3})/, "$1.")}
                         </td>
-                        <td className="px-6 py-4 text-sm">
+                        {/* <td className="px-6 py-4 text-sm">
                           <div className="flex gap-3">
                             <Tooltip title="Restore" arrow placement="top">
                               <SettingsBackupRestoreIcon
@@ -238,7 +238,7 @@ function ArchiveTable() {
                               />
                             </Tooltip>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     );
                   })
