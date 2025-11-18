@@ -219,7 +219,7 @@ function ArchiveTable() {
                             })
                             .replace(/^([A-Za-z]{3})/, "$1.")}
                         </td>
-                        {/* <td className="px-6 py-4 text-sm">
+                        <td className="px-6 py-4 text-sm">
                           <div className="flex gap-3">
                             <Tooltip title="Restore" arrow placement="top">
                               <SettingsBackupRestoreIcon
@@ -227,7 +227,7 @@ function ArchiveTable() {
                                 onClick={() => handleRestore(file)} // ✅ send whole file
                               />
                             </Tooltip>
-                            <Tooltip
+                            {/* <Tooltip
                               title="Delete Permanently"
                               arrow
                               placement="top"
@@ -236,9 +236,9 @@ function ArchiveTable() {
                                 className="cursor-pointer text-red-600"
                                 onClick={() => handleDelete(file)} // ✅ send whole file
                               />
-                            </Tooltip>
+                            </Tooltip> */}
                           </div>
-                        </td> */}
+                        </td>
                       </tr>
                     );
                   })
