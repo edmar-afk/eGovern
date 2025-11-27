@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore";
 import { getUserInfoFromToken } from "../../utils/auth";
 import Search from "../Search";
+import MsViewer from "../MsViewer";
 function ArchiveTable() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -237,6 +238,12 @@ function ArchiveTable() {
                                 onClick={() => handleDelete(file)} // ✅ send whole file
                               />
                             </Tooltip> */}
+                            <Tooltip title="View File" arrow placement="top">
+                              <MsViewer
+                                fileUrl={file.file}
+                                extension={extension.toLowerCase()}
+                              />
+                            </Tooltip>
                           </div>
                         </td>
                       </tr>

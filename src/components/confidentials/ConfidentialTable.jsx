@@ -8,6 +8,7 @@ import SettingsBackupRestoreIcon from "@mui/icons-material/SettingsBackupRestore
 import ConfidentialFileUpload from "./ConfidentialFileUpload";
 import Search from "../Search";
 import PassKey from "./PassKey";
+import MsViewer from "../MsViewer";
 
 function ConfidentialTable() {
   const [files, setFiles] = useState([]);
@@ -84,7 +85,7 @@ function ConfidentialTable() {
 
   return (
     <>
-    <PassKey/>
+      <PassKey />
       <div className="w-full flex items-center justify-center min-h-full p-2">
         <div className="container">
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -199,6 +200,16 @@ function ConfidentialTable() {
                                 <DeleteForeverIcon
                                   className="cursor-pointer text-red-600"
                                   onClick={() => handleDelete(file.id)}
+                                />
+                              </Tooltip>
+                              <Tooltip
+                                title="View File"
+                                arrow
+                                placement="top"
+                              >
+                                <MsViewer
+                                  fileUrl={file.file}
+                                  extension={extension.toLowerCase()}
                                 />
                               </Tooltip>
                             </div>

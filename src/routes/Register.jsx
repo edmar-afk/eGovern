@@ -6,10 +6,16 @@ import { Button } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import CircularProgress from "@mui/material/CircularProgress";
 import Swal from "sweetalert2";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -176,24 +182,42 @@ const Register = () => {
                 onChange={handleChange}
                 className="w-full border border-slate-300 px-4 py-3 rounded-md"
               />
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-slate-300 px-4 py-3 rounded-md"
-                required
-              />
-              <input
-                name="confirmPassword"
-                type="password"
-                placeholder="Retype Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full border border-slate-300 px-4 py-3 rounded-md"
-                required
-              />
+              <div className="relative">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full border border-slate-300 px-4 py-3 rounded-md"
+                  required
+                />
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </div>
+              </div>
+
+              <div className="relative">
+                <input
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Retype Password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full border border-slate-300 px-4 py-3 rounded-md"
+                  required
+                />
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </div>
+              </div>
+
               {!passwordsMatch && formData.confirmPassword && (
                 <p className="text-red-600 text-sm">Passwords do not match</p>
               )}
