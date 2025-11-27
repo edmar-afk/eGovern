@@ -5,7 +5,7 @@ import PrintIcon from "@mui/icons-material/Print";
 
 function MsViewer({ fileUrl, extension }) {
   const [open, setOpen] = useState(false);
-  console.log("url of file in msviewer: ", fileUrl);
+  // console.log("url of file in msviewer: ", fileUrl);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -65,7 +65,7 @@ function MsViewer({ fileUrl, extension }) {
                 style={{ width: "100%", height: "100%", border: "none" }}
               />
             ) : (
-              <p>Preview not available for this file type.</p>
+              <p className="flex flex-row items-center font-bold text-xl justify-center pt-24 text-center">Preview not available for Images. <br/> Click the Name of the image in the table to view instead.</p>
             )}
           </Box>
           <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
