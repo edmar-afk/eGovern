@@ -346,7 +346,7 @@ function FilesTable({ folderId }) {
                               fileUrl={file.file}
                               extension={extension.toLowerCase()}
                             />
-                            <Tooltip
+                            {/* <Tooltip
                               title="Print"
                               arrow
                               placement="top"
@@ -370,7 +370,7 @@ function FilesTable({ folderId }) {
                                   onClick={() => handlePrint(file)}
                                 />
                               )}
-                            </Tooltip>
+                            </Tooltip> */}
                           </div>
                         </td>
                       </tr>
